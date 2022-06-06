@@ -82,11 +82,31 @@ const menu = [
 ];
 
 const sectionCenter = document.querySelector(".section-center");
-const btns = document.querySelectorAll(".filter-btn");
 const btnContainer = document.querySelector(".btn-container");
 
 window.addEventListener("DOMContentLoaded", function () {
   displayMenuItem(menu);
+  displayMenuButtons();
+});
+
+function displayMenuItem(menuItem) {
+  let displayMenu = menuItem.map(function (item) {
+    return `<article class="menu-item">
+     <img src=${item.img} class="photo" alt=${item.title} />
+     <div class="item-info">
+       <header>
+         <h4>${item.title}</h4>
+         <h4 class="price">$${item.price}</h4>
+       </header>
+       <p class="item-text">${item.desc}</p>
+     </div>
+   </article>`;
+  });
+  displayMenu = displayMenu.join("");
+  sectionCenter.innerHTML = displayMenu;
+}
+
+function displayMenuButtons() {
   const catagories = menu.reduce(
     function (values, item) {
       if (!values.includes(item.category)) {
@@ -105,37 +125,21 @@ window.addEventListener("DOMContentLoaded", function () {
     })
     .join("");
   btnContainer.innerHTML = catagoryBtns;
-});
+  const btns = btnContainer.querySelectorAll(".filter-btn");
 
-btns.forEach(function (btn) {
-  btn.addEventListener("click", function (e) {
-    const catagory = e.currentTarget.dataset.id;
-    const menuCatagory = menu.filter(function (menuItem) {
-      if (menuItem.category === catagory) {
-        return menuItem;
+  btns.forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      const catagory = e.currentTarget.dataset.id;
+      const menuCatagory = menu.filter(function (menuItem) {
+        if (menuItem.category === catagory) {
+          return menuItem;
+        }
+      });
+      if (catagory === "all") {
+        displayMenuItem(menu);
+      } else {
+        displayMenuItem(menuCatagory);
       }
     });
-    if (catagory === "all") {
-      displayMenuItem(menu);
-    } else {
-      displayMenuItem(menuCatagory);
-    }
   });
-});
-
-function displayMenuItem(menuItem) {
-  let displayMenu = menuItem.map(function (item) {
-    return `<article class="menu-item">
-     <img src=${item.img} class="photo" alt=${item.title} />
-     <div class="item-info">
-       <header>
-         <h4>${item.title}</h4>
-         <h4 class="price">$${item.price}</h4>
-       </header>
-       <p class="item-text">${item.desc}</p>
-     </div>
-   </article>`;
-  });
-  displayMenu = displayMenu.join("");
-  sectionCenter.innerHTML = displayMenu;
 }
