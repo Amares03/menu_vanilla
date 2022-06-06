@@ -83,9 +83,28 @@ const menu = [
 
 const sectionCenter = document.querySelector(".section-center");
 const btns = document.querySelectorAll(".filter-btn");
+const btnContainer = document.querySelector(".btn-container");
 
 window.addEventListener("DOMContentLoaded", function () {
   displayMenuItem(menu);
+  const catagories = menu.reduce(
+    function (values, item) {
+      if (!values.includes(item.category)) {
+        values.push(item.category);
+      }
+      return values;
+    },
+    ["all"]
+  );
+
+  const catagoryBtns = catagories
+    .map(function (catagory) {
+      return ` <button class="filter-btn" type="button" data-id=${catagory}>
+    ${catagory}
+  </button>`;
+    })
+    .join("");
+  btnContainer.innerHTML = catagoryBtns;
 });
 
 btns.forEach(function (btn) {
